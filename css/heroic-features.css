@@ -17,3 +17,7 @@ body {
 .card {
   height: 100%;
 }
+
+h1{
+  font-weight: 200;
+}
