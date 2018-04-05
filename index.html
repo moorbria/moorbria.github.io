@@ -59,34 +59,83 @@
               <div class="col-md-12" id="jumbotron_title">
                 <h1>Simulated Paging System</h1>
                 <p class="lead">This programming assignment was designed primarily to improve my understanding of memory allocation protocols, operating system kernel data structures, and memory management hardware.  It also incorporates an additional element of modern operating systems: user-interface design and graphical display.</p>
-                <a href="#" class="btn btn-primary btn-lg" id="start_btn">Call to action!</a>
+                <label class="btn btn-primary btn-lg btn-file" style="margin-bottom:0px;">
+                  Browse <input type="file" style="display: none;" id="file_btn">
+                </label>
+                <button class="btn btn-primary btn-lg btn-default" id="start_btn" disabled>
+                  Upload
+                </button>
+                <button class="btn btn-success btn-lg btn-default" id="next_btn" disabled>
+                  Next
+                </button>
               </div>
               <div class="col-md-0" id="memory_table">
-                <table class="table table-condensed">
+                <table class="table">
                   <tr>
                     <th>Frame #</th>
                     <th>Proc ID</th>
                     <th>Segment</th>
                     <th>Page #</th>
                   </tr>
+                  <tr free="true">
+                    <td>0</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
                   <tr>
                     <td>1</td>
-                    <td>7</td>
-                    <td>Text</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
                     <td>4</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                 </table>
               </div>
             </div>
           </div>
         </header>
-
+              
+            
       <!-- Page Features -->
       <div class="row text-center">
-
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
             <div class="card-body">
               <h4 class="card-title">Card title</h4>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
@@ -99,7 +148,6 @@
 
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
             <div class="card-body">
               <h4 class="card-title">Card title</h4>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
@@ -112,7 +160,6 @@
 
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
             <div class="card-body">
               <h4 class="card-title">Card title</h4>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
@@ -125,7 +172,6 @@
 
         <div class="col-lg-3 col-md-6 mb-4">
           <div class="card">
-            <img class="card-img-top" src="http://placehold.it/500x325" alt="">
             <div class="card-body">
               <h4 class="card-title">Card title</h4>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
@@ -135,7 +181,6 @@
             </div>
           </div>
         </div>
-
       </div>
       <!-- /.row -->
 
@@ -143,12 +188,11 @@
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <!-- <footer class="py-5 bg-dark">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
       </div>
-      <!-- /.container -->
-    </footer>
+    </footer> -->
 
     <!-- Bootstrap core JavaScript -->
     <!--<script src="vendor/jquery/jquery.min.js"></script>-->
