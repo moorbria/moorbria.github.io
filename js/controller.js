@@ -6,7 +6,8 @@ var reader = new FileReader();
 
 // Callback to allow start once reader has read a file
 reader.onload = function(event){
-  $("#start_btn").prop("disabled", false);
+  $("#start_btn").show();
+  $("#restart_btn").show();
 };
 
 // Size of physical Memory
@@ -21,16 +22,23 @@ let commands = [];
 let programCounter = 0;
 
 // Page Object
-function Page(number, type, size){
-  this.number = number;
-  this.type = type;
-  this.size = size;
-  console.log("hi");
-  $("tr[free='true']").first().children("td").html("hello");
+function Page(procId, segment, pageNum, segmentLength){
+  this.procId = procId;
+  this.segment = segment;
+  this.pageNum = pageNum;
+
+  // Add frames to memory table
+  $("tr[data-free-frame='true']").first().children("td[data-value='procId']").html(this.procId);
+  $("tr[data-free-frame='true']").first().children("td[data-value='segment']").html(this.segment);
+  $("tr[data-free-frame='true']").first().children("td[data-value='pageNum']").html(this.pageNum);
+  $("tr[data-free-frame='true']").first().attr("data-free-frame",this.procId);
 }
 
 // Add events
 $('#file_btn').on('change', prepareUpload);
+
+// Reload the page to restart
+$("#restart_btn").click(function(){location.reload();});
 
 // Starts the program from the uploaded file
 $("#start_btn").click(function(){
@@ -45,8 +53,102 @@ $("#start_btn").click(function(){
 });
 
 $("#next_btn").click(function(){
+  $(this).text("Next");
   console.log(commands[programCounter]);
-  new Page(1,"text",512);
+  const command = commands[programCounter];
+  const tokens = command.split(" "); 
+  if (tokens[1].toLowerCase() == "halt"){
+   $("tr[data-free-frame=" + tokens[0] + "]").children("td[data-value]").html("");
+   $("tr[data-free-frame=" + tokens[0] + "]").attr("data-free-frame","true");
+
+    $("div[data-process-number=" + tokens[0] + "]").fadeOut(500,function(){$(this).remove();});
+  }else{
+    var i = 0;
+    var textCount = Math.ceil(tokens[1]/pageSize);
+    var dataCount = Math.ceil(tokens[2]/pageSize);
+
+    // Built Process Card
+    var strVar="";
+    strVar += "        <div class=\"col-lg-4 col-md-6 mb-4\" data-process-number=\"" + tokens[0] + "\">";
+    strVar += "          <div class=\"card\">";
+    strVar += "            <div class=\"card-body\">";
+    strVar += "              <h4 class=\"card-title\">Process ID: <span>" + tokens[0] + "<\/span><\/h4>";
+    strVar += "              <h4><small class=\"segment-type-" + tokens[0] + "\">Text<\/small><\/h4>";
+    strVar += "              <table class=\"table table-condensed \">";
+    strVar += "                <thead>";
+    strVar += "                  <tr>";
+    strVar += "                    <th scope=\"col\">Page<\/th>";
+    strVar += "                    <th scope=\"col\">Frame<\/th>";
+    strVar += "                    <th scope=\"col\">Length<\/th>";
+    strVar += "                  <\/tr>";
+    strVar += "                <\/thead>";
+    strVar += "                <tbody>";
+
+
+    while (i < textCount){
+      let frameNum = $("tr[data-free-frame='true']").first().children("td[data-frame-number]").attr("data-frame-number");
+      strVar += "                  <tr class='segment-type-text-" + tokens[0] + "'>";
+      strVar += "                    <td data-value=\"pageNum\">" + i + "<\/td>";
+      strVar += "                    <td data-value=\"frameNum\">" + frameNum + "<\/td>";
+      if((i + 1) == textCount){
+        
+        new Page(tokens[0],"text", i, tokens[1] % pageSize);
+      strVar += "                    <td data-value=\"segLength\">" + (512 - tokens[1] % pageSize) + "<\/td>";
+      }else{
+        new Page(tokens[0],"text", i, pageSize);
+      strVar += "                    <td data-value=\"segLength\">512<\/td>";
+      }
+      strVar += "                  <\/tr>";
+      i++; 
+    }
+    i = 0;
+    while (i < dataCount){
+      let frameNum = $("tr[data-free-frame='true']").first().children("td[data-frame-number]").attr("data-frame-number");
+      strVar += "                  <tr class='segment-type-data-" + tokens[0] + "' style='display:none;'>";
+      strVar += "                    <td data-value=\"pageNum\">" + i + "<\/td>";
+      strVar += "                    <td data-value=\"frameNum\">" + frameNum + "<\/td>";
+      if((i+1) == dataCount){
+        new Page(tokens[0],"data", i, tokens[2] % pageSize);
+        strVar += "                    <td data-value=\"segLength\">" + (512 - tokens[1] % pageSize) + "<\/td>";
+      }else{
+        new Page(tokens[0],"data", i, pageSize);
+        strVar += "                    <td data-value=\"segLength\">512<\/td>";
+      }
+      strVar += "                  <\/tr>";
+      i++; 
+    }
+
+    strVar += "                <\/tbody>"; 
+    strVar += "              <\/table>";
+    strVar += "            <\/div>";
+    strVar += "            <div class=\"card-footer\">";
+    strVar += "              <button class=\"btn btn-primary\" id=\"proc" + tokens[0] + "btn\" data-shown-segment-type=\"text\">Show Data Segments<\/button>";
+    strVar += "            <\/div>";
+    strVar += "          <\/div>";
+    strVar += "        <\/div>";
+  }
+
+  $("#card-container").append($(strVar).hide().fadeIn(500)); 
+
+
+
+  $("#proc" + tokens[0] + "btn").click(function(){
+    const btn = $(this);
+    if($(btn).attr("data-shown-segment-type") == "text"){
+      $(btn).attr("data-shown-segment-type","data");
+      $(".segment-type-" + tokens[0]).text("Data");
+      $(btn).text("Show Text Segments");
+    }else{
+      $(btn).attr("data-shown-segment-type","text");
+      $(".segment-type-" + tokens[0]).text("Text");
+      $(btn).text("Show Data Segments");
+    }
+    $(".segment-type-data-" + tokens[0]).toggle();  
+    $(".segment-type-text-" + tokens[0]).toggle();
+});
+
+
+
   programCounter++;
 });
 

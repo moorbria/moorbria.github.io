@@ -22,15 +22,10 @@ h1{
   font-weight: 200;
 }
 
-#memory_table, #next_btn{
+#memory_table, #next_btn, #restart_btn, #start_btn{
   display:none;
 }
 
-table { 
-  border-spacing: 10px !important;
-  border-collapse: separate !important;
-}
 
-td { 
-  padding: 5px !important;
-}
+
+
